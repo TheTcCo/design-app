@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <title>Design</title>
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data: blob:; style-src 'self' 'unsafe-inline'; font-src 'self' data:; script-src 'self'" />
+  <link rel="stylesheet" href="fonts.css" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="app" id="app">
+    <header class="topbar drag">
+      <div class="doc">
+        <span class="app-title">Design</span>
+        <input id="doc-name" class="doc-name no-drag" value="Untitled" spellcheck="false" aria-label="Document name" />
+        <button class="icon-btn doc-menu-btn no-drag" id="doc-menu" title="Document — New, Open, Save, Export…" aria-label="Document menu" aria-haspopup="menu"></button>
+        <span id="dirty" class="dirty" hidden>Edited</span>
+      </div>
+
+      <div class="center-controls no-drag">
+        <div class="seg"><button class="on garment-pick" id="garment-seg" aria-haspopup="menu" aria-label="Garment"></button></div>
+        <div class="seg" id="side-seg" role="radiogroup" aria-label="Side">
+          <button data-side="front">Front</button>
+          <button data-side="back">Back</button>
+        </div>
+        <div class="seg" id="mode-seg" role="radiogroup" aria-label="View">
+          <button data-mode="edit" title="Edit (⌘Y toggles)">Edit</button>
+          <button data-mode="preview" title="Preview mockup (⌘Y toggles)">Preview</button>
+        </div>
+      </div>
+
+      <div class="right-controls no-drag">
+        <button class="icon-btn" id="btn-undo" title="Undo (⌘Z)" aria-label="Undo"></button>
+        <button class="icon-btn" id="btn-redo" title="Redo (⇧⌘Z)" aria-label="Redo"></button>
+        <span class="sep"></span>
+        <button class="icon-btn" id="btn-panels" title="Hide panels (⌃⌘S)" aria-label="Hide panels" aria-pressed="false"></button>
+        <button class="primary-btn" id="btn-export" title="Export (⌘E)">Export</button>
+        <button id="close" aria-label="Close" title="Close"></button>
+      </div>
+    </header>
+
+    <div class="main">
+      <nav class="tools" id="tools" aria-label="Tools"></nav>
+
+      <aside class="library" id="library">
+        <div class="tabs" role="tablist">
+          <button data-tab="motifs" class="on">Motifs</button>
+          <button data-tab="words">Words</button>
+          <button data-tab="textures">Textures</button>
+          <button data-tab="uploads">Uploads</button>
+        </div>
+        <div class="lib-body" id="lib-body"></div>
+      </aside>
+
+      <section class="stage" id="stage">
+        <svg id="layer-base" class="glayer" xmlns="http://www.w3.org/2000/svg"></svg>
+        <div class="canvas-host"><canvas id="c"></canvas></div>
+        <svg id="layer-shadow" class="glayer shade" xmlns="http://www.w3.org/2000/svg"></svg>
+        <svg id="layer-light" class="glayer light" xmlns="http://www.w3.org/2000/svg"></svg>
+        <svg id="layer-guides" class="glayer guides" xmlns="http://www.w3.org/2000/svg"></svg>
+        <div class="drop-hint" id="drop-hint">Drop artwork to place it</div>
+        <div class="onboard" id="onboard" hidden>
+          <div class="onboard-card">
+            <div class="onboard-title">Start your design</div>
+            <p>Everything you place lands inside the blue print area. Drag motifs from the left, or start from one of these:</p>
+            <div class="onboard-actions">
+              <button data-ob="layout"><strong>Laurel crest</strong><span>A ready-made layout to edit</span></button>
+              <button data-ob="word"><strong>Greek lettering</strong><span>ΑΡΕΤΗ, editable text</span></button>
+              <button data-ob="import"><strong>Import artwork</strong><span>PNG, JPG or SVG</span></button>
+            </div>
+            <div class="onboard-recent" id="onboard-recent" hidden></div>
+            <button class="onboard-search" data-ob="search">Search everything <kbd>⌘K</kbd></button>
+          </div>
+        </div>
+      </section>
+
+      <aside class="inspector">
+        <div class="props" id="props"></div>
+        <div class="layers-panel">
+          <div class="panel-head">
+            <span>Layers <span class="count" id="layer-count"></span></span>
+            <button class="ibtn small-ibtn" id="layer-add" title="New layer (⇧⌘N)" aria-label="New layer"></button>
+          </div>
+          <div class="layers" id="layers"></div>
+        </div>
+      </aside>
+    </div>
+
+    <footer class="status">
+      <span id="st-tool"></span>
+      <span id="st-cursor"></span>
+      <span id="st-warn" class="warn"></span>
+      <span class="flex"></span>
+      <button class="zoom-btn" id="zoom-out" aria-label="Zoom out" title="Zoom out (⌘−)">−</button>
+      <button class="zoom-val" id="zoom-val" title="Fit garment (⌘0) · click to cycle">100%</button>
+      <button class="zoom-btn" id="zoom-in" aria-label="Zoom in" title="Zoom in (⌘+)">+</button>
+      <button class="text-btn" id="fit-print" title="Zoom to print area (⌘1)">Print area</button>
+      <button class="zoom-btn help-btn" id="btn-help" title="Keyboard shortcuts (?)" aria-label="Keyboard shortcuts">?</button>
+    </footer>
+
+    <div class="modal-overlay" id="export-modal" hidden>
+      <div class="modal wide" role="dialog" aria-labelledby="export-title">
+        <div class="modal-title" id="export-title">Export</div>
+        <div class="export-kinds" id="export-kinds">
+          <button data-kind="print" class="on"><strong>Print file</strong><span>PNG · 300 DPI · transparent</span></button>
+          <button data-kind="mockup"><strong>Mockup</strong><span>Photo-style, social sizes</span></button>
+          <button data-kind="techpack"><strong>Tech pack</strong><span>PDF for the factory</span></button>
+          <button data-kind="separations"><strong>Separations</strong><span>One film per ink</span></button>
+          <button data-kind="svg"><strong>Vector</strong><span>SVG of the print area</span></button>
+        </div>
+        <div class="field" id="export-sides-field">
+          <span class="label">Sides</span>
+          <div class="seg small" id="export-sides">
+            <button data-v="current" class="on">This side</button>
+            <button data-v="both">Front + back</button>
+          </div>
+        </div>
+        <div id="export-mockup-fields" hidden>
+          <div class="field">
+            <span class="label">Style</span>
+            <div class="seg small" id="export-style">
+              <button data-v="sketch" class="on">Flat sketch</button>
+              <button data-v="photo">Photo</button>
+            </div>
+          </div>
+          <div class="field">
+            <span class="label">Size</span>
+            <div class="seg small" id="export-format">
+              <button data-v="sheet" class="on">Full size</button>
+              <button data-v="square">Post 1:1</button>
+              <button data-v="portrait">Post 4:5</button>
+              <button data-v="story">Story 9:16</button>
+            </div>
+          </div>
+          <div class="field">
+            <span class="label">Backdrop</span>
+            <div class="seg small" id="export-backdrop">
+              <button data-v="studio" class="on">Studio</button>
+              <button data-v="stone">Stone</button>
+              <button data-v="night">Night</button>
+              <button data-v="transparent">None</button>
+            </div>
+          </div>
+          <div class="field top">
+            <span class="label">Colorways</span>
+            <div class="swatches" id="export-colors"></div>
+          </div>
+          <div class="field">
+            <span class="label">Caption</span>
+            <label class="toggle"><input type="checkbox" id="export-caption"/><span>Show design name</span></label>
+          </div>
+        </div>
+        <p class="hint" id="export-hint"></p>
+        <div class="modal-actions">
+          <button class="text-btn" id="export-cancel">Cancel</button>
+          <button class="primary-btn" id="export-go">Export</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-overlay" id="palette-modal" hidden>
+      <div class="modal" role="dialog" aria-labelledby="palette-title">
+        <div class="modal-title" id="palette-title">Brand palette</div>
+        <p class="hint">Your brand inks, offered first in every color picker. Shared by every design; any other color is still one click away.</p>
+        <div class="pal-rows" id="palette-rows"></div>
+        <div class="modal-actions spread">
+          <div>
+            <button class="text-btn" id="pal-add">Add color</button>
+            <button class="text-btn" id="pal-reset">Reset</button>
+          </div>
+          <div>
+            <button class="text-btn" id="pal-cancel">Cancel</button>
+            <button class="primary-btn" id="pal-save">Save</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-overlay cmd" id="cmd-modal" hidden>
+      <div class="cmd-box" role="dialog" aria-label="Search commands">
+        <input id="cmd-input" placeholder="Search motifs, words, tools, garments, commands…" spellcheck="false" autocomplete="off" role="combobox" aria-controls="cmd-list" aria-expanded="true"/>
+        <div class="cmd-list" id="cmd-list" role="listbox"></div>
+      </div>
+    </div>
+
+    <div class="modal-overlay" id="help-modal" hidden>
+      <div class="modal wide help" role="dialog" aria-labelledby="help-title">
+        <div class="modal-title" id="help-title">Shortcuts</div>
+        <div class="help-grid" id="help-grid"></div>
+        <div class="modal-actions"><button class="primary-btn" id="help-close">Done</button></div>
+      </div>
+    </div>
+
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  </div>
+
+  <script src="vendor/fabric.min.js"></script>
+  <script src="js/config.js"></script>
+  <script src="js/garments.js"></script>
+  <script src="js/motifs.js"></script>
+  <script src="js/editor.js"></script>
+  <script src="js/pen.js"></script>
+  <script src="js/brushes.js"></script>
+  <script src="js/wand.js"></script>
+  <script src="js/io.js"></script>
+  <script src="js/icons.js"></script>
+  <script src="js/panels.js"></script>
+  <script src="js/production.js"></script>
+  <script src="js/textures.js"></script>
+  <script src="js/array.js"></script>
+  <script src="js/transform.js"></script>
+  <script src="js/ux.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
