@@ -253,7 +253,9 @@
 
   // ================= start card =================
   DZ.updateOnboarding = () => {
-    const show = E.state.mode === 'edit' && !E.canvas.getObjects().length && !DZ.pen.active();
+    let closed = false;
+    try { closed = localStorage.getItem('dz-onboard-closed') === '1'; } catch (e) {}
+    const show = !closed && E.state.mode === 'edit' && !E.canvas.getObjects().length && !DZ.pen.active();
     $('onboard').hidden = !show;
   };
   DZ.renderRecent = async () => {
@@ -268,6 +270,10 @@
 
   function wireOnboarding() {
     DZ.renderRecent();
+    $('onboard-x').addEventListener('click', () => {
+      try { localStorage.setItem('dz-onboard-closed', '1'); } catch (e) {}
+      DZ.updateOnboarding();
+    });
     $('onboard').addEventListener('click', async (e) => {
       const rb = e.target.closest('[data-recent]');
       if (rb) return DZ.runCommand('openPath', rb.dataset.recent);

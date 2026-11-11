@@ -167,6 +167,8 @@
   }
 
   function addHood(g, n) {
+    // smaller hood: shrink hood outlines about the neck (x 0.9, y 0.88 around y=2)
+    const hs = (d) => d.replace(/(-?\d*\.?\d+) (-?\d*\.?\d+)/g, (m, x, y) => `${(+x * 0.9).toFixed(3)} ${(2 + (+y - 2) * 0.88).toFixed(3)}`);
     g.hoodBehind = `M ${-(n + 1.4)} 2.4 C ${-(n + 3.7)} -3.4 ${-(n + 2)} -11.9 0 -12.3 C ${n + 2} -11.9 ${n + 3.7} -3.4 ${n + 1.4} 2.4 Z`;
     g.hoodOpening = `M ${-(n - 1.1)} 4 C ${-(n + 0.5)} -1.9 ${-(n - 1.3)} -9.6 0 -10 C ${n - 1.3} -9.6 ${n + 0.5} -1.9 ${n - 1.1} 4 L 0 6.5 Z`;
     g.hoodRimLeft = `M 0.9 6.8 L ${-(n - 1.1)} 4 C ${-(n + 0.5)} -1.9 ${-(n - 1.3)} -9.6 0 -10`;
@@ -175,6 +177,7 @@
     g.hoodBack = `M ${-(n + 1.6)} 0.9 C ${-(n + 2.9)} 5.2 ${-(n + 0.8)} 11.3 0 12 C ${n + 0.8} 11.3 ${n + 2.9} 5.2 ${n + 1.6} 0.9 C ${n * 0.55} 2.4 ${-n * 0.55} 2.4 ${-(n + 1.6)} 0.9 Z`;
     g.hoodBackSeam = 'M 0 2.2 L 0 11.9';
     const pt0 = 16.2, pb = g.hemTop + 0.36;
+    for (const k of ['hoodBehind', 'hoodOpening', 'hoodRimLeft', 'hoodRimRight', 'hoodSeam', 'hoodBack', 'hoodBackSeam']) g[k] = hs(g[k]);
     g.pocket = `M -5.4 ${pt0} L 5.4 ${pt0} C 6.3 ${pt0 + 2.8} 7.3 ${pb - 3.4} 7.6 ${pb} L -7.6 ${pb} C -7.3 ${pb - 3.4} -6.3 ${pt0 + 2.8} -5.4 ${pt0} Z`;
     g.pocketOpenings = [`M 5.4 ${pt0} C 6.3 ${pt0 + 2.8} 7.3 ${pb - 3.4} 7.6 ${pb}`, `M -5.4 ${pt0} C -6.3 ${pt0 + 2.8} -7.3 ${pb - 3.4} -7.6 ${pb}`];
     g.pocketStitch = `M -5.1 ${pt0 + 0.38} L 5.1 ${pt0 + 0.38}`;
@@ -188,30 +191,30 @@
   }
 
   const TEE = build({
-    n: 3.6, rib: 0.85, dF: 3.5, dB: 0.85, W: 11.0, hemY: 28.4,
-    shoulder: [10.2, 1.9], underarm: [10.9, 9.9],
-    short: { c1: [11.7, 2.35], c2: [13.0, 3.2], T: [15.2, 4.4], open: 6.0 },
+    n: 3.6, rib: 0.85, dF: 3.5, dB: 0.85, W: 10.2, hemY: 28.4,
+    shoulder: [9.8, 1.9], underarm: [10.1, 9.9],
+    short: { c1: [11.0, 2.4], c2: [12.5, 3.4], T: [14.9, 5.0], open: 6.6 },
   });
   const LONGTEE = build({
-    n: 3.6, rib: 0.85, dF: 3.4, dB: 0.85, W: 10.9, hemY: 28.6,
-    shoulder: [10.3, 2.0], underarm: [10.9, 10.4],
-    long: { c1: [12.0, 2.5], c2: [13.8, 4.5], E: [15.0, 10.0], Tb: [16.8, 23.6], end: 4.2, cuff: 1.9, inset: 0.35 },
+    n: 3.6, rib: 0.85, dF: 3.4, dB: 0.85, W: 10.2, hemY: 28.6,
+    shoulder: [9.9, 2.0], underarm: [10.1, 10.4],
+    long: { c1: [11.4, 2.5], c2: [13.3, 4.6], E: [14.8, 10.0], Tb: [19.1, 23.4], end: 4.4, cuff: 1.9, inset: 0.35 },
   });
   const CREW = build({
-    n: 3.75, rib: 0.95, dF: 3.2, dB: 0.9, W: 11.2, hemY: 27.6, hemRib: 2.6, vee: true,
-    shoulder: [10.5, 2.1], underarm: [11.1, 10.8],
-    long: { c1: [12.2, 2.6], c2: [14.0, 4.7], E: [15.2, 10.3], Tb: [17.0, 22.8], end: 4.5, cuff: 2.6, inset: 0.45 },
+    n: 3.75, rib: 0.95, dF: 3.2, dB: 0.9, W: 10.4, hemY: 27.6, hemRib: 2.6, vee: true,
+    shoulder: [10.1, 2.1], underarm: [10.3, 10.8],
+    long: { c1: [11.7, 2.6], c2: [13.8, 4.8], E: [15.2, 10.3], Tb: [19.6, 23.0], end: 4.9, cuff: 2.6, inset: 0.45 },
   });
   const HOODIE = addHood(build({
-    n: 5.4, dF: 2.6, dB: 1.0, W: 11.4, hemY: 27.8, hemRib: 2.75, hood: true,
-    shoulder: [10.7, 2.2], underarm: [11.3, 11.0],
-    long: { c1: [12.4, 2.7], c2: [14.2, 4.9], E: [15.4, 10.5], Tb: [17.2, 23.0], end: 4.6, cuff: 2.75, inset: 0.45 },
+    n: 5.4, dF: 2.6, dB: 1.0, W: 10.5, hemY: 27.8, hemRib: 2.75, hood: true,
+    shoulder: [10.2, 2.2], underarm: [10.4, 11.0],
+    long: { c1: [11.8, 2.7], c2: [13.9, 5.0], E: [15.3, 10.5], Tb: [19.6, 23.2], end: 4.9, cuff: 2.75, inset: 0.45 },
   }), 5.4);
 
   const HOOD_SPEC = {
-    n: 5.4, dF: 2.6, dB: 1.0, W: 11.4, hemY: 27.8, hemRib: 2.75, hood: true,
-    shoulder: [10.7, 2.2], underarm: [11.3, 11.0],
-    long: { c1: [12.4, 2.7], c2: [14.2, 4.9], E: [15.4, 10.5], Tb: [17.2, 23.0], end: 4.6, cuff: 2.75, inset: 0.45 },
+    n: 5.4, dF: 2.6, dB: 1.0, W: 10.5, hemY: 27.8, hemRib: 2.75, hood: true,
+    shoulder: [10.2, 2.2], underarm: [10.4, 11.0],
+    long: { c1: [11.8, 2.7], c2: [13.9, 5.0], E: [15.3, 10.5], Tb: [19.6, 23.2], end: 4.9, cuff: 2.75, inset: 0.45 },
   };
   // Full-zip hoodie: same body and hood, a center front zip from the hood's V to the hem.
   const ZIP = addHood(build(HOOD_SPEC), 5.4);
@@ -220,9 +223,9 @@
 
   // Bomber: tall rib stand collar, center zip, slanted welt pockets, rib cuffs and hem.
   const JACKET = build({
-    n: 3.8, rib: 1.35, dF: 3.2, dB: 0.9, W: 11.8, hemY: 26.6, hemRib: 2.8,
-    shoulder: [11.0, 2.2], underarm: [11.6, 11.2],
-    long: { c1: [12.7, 2.75], c2: [14.6, 5.0], E: [15.8, 10.6], Tb: [17.6, 22.6], end: 4.8, cuff: 2.8, inset: 0.45 },
+    n: 3.8, rib: 1.35, dF: 3.2, dB: 0.9, W: 10.8, hemY: 26.6, hemRib: 2.8,
+    shoulder: [10.5, 2.2], underarm: [10.6, 11.2],
+    long: { c1: [12.0, 2.75], c2: [14.4, 5.1], E: [15.8, 10.6], Tb: [20.2, 23.0], end: 5.2, cuff: 2.8, inset: 0.45 },
   });
   JACKET.zipFront = true;
   {
@@ -246,7 +249,7 @@
     const g = { kind: 'bottom', seams: [], stitches: [], ribs: [], folds: [], spec: { ...sp, W: hipX, hemY: L }, sleeves: [], armpits: [], shoulderTop: [] };
     const right = [
       ['L', [wa, 0]], ['L', [wa, wb]],
-      ['C', [wa + 0.25, wb + 2.4], [hipX, hipY - 3], [hipX, hipY]],
+      ['C', [wa + 0.4, wb + 3.0], [hipX - 0.1, hipY - 3.2], [hipX, hipY]],
     ];
     let iTop, yI;
     if (cuff) {
@@ -308,8 +311,8 @@
     return g;
   }
 
-  const PANTS = buildBottoms({ wa: 7.6, wb: 1.9, hipX: 11.6, hipY: 8.8, rise: 13, L: 42.5, outHem: 9.1, inHem: 3.9, cuff: 3 });
-  const SHORTS = buildBottoms({ wa: 7.6, wb: 1.9, hipX: 11.8, hipY: 8.8, rise: 12.6, L: 20.6, outHem: 13.1, inHem: 1.05, slope: 0.8 });
+  const PANTS = buildBottoms({ wa: 8.2, wb: 1.9, hipX: 10.9, hipY: 8.8, rise: 13, L: 42.5, outHem: 9.1, inHem: 3.9, cuff: 3 });
+  const SHORTS = buildBottoms({ wa: 8.2, wb: 1.9, hipX: 10.9, hipY: 8.8, rise: 12.6, L: 20.6, outHem: 10.9, inHem: 1.2, slope: 0.4 });
 
   const SHAPES = { tee: TEE, longtee: LONGTEE, hoodie: HOODIE, crew: CREW, ziphoodie: ZIP, jacket: JACKET, shorts: SHORTS, pants: PANTS };
 
