@@ -198,23 +198,23 @@
   const LONGTEE = build({
     n: 3.6, rib: 0.85, dF: 3.4, dB: 0.85, W: 10.2, hemY: 28.6,
     shoulder: [9.9, 2.0], underarm: [10.1, 10.4],
-    long: { c1: [11.0, 2.5], c2: [12.6, 4.6], E: [14.1, 10.0], Tb: [15.0, 23.4], end: 4.5, cuff: 1.9, inset: 0.35 },
+    long: { c1: [11.0, 2.5], c2: [13.6, 4.6], E: [15.4, 10.0], Tb: [17.9, 23.4], end: 5.0, cuff: 1.9, inset: 0.35 },
   });
   const CREW = build({
     n: 3.75, rib: 0.95, dF: 3.2, dB: 0.9, W: 10.4, hemY: 27.6, hemRib: 2.6, vee: true,
     shoulder: [10.1, 2.1], underarm: [10.3, 10.8],
-    long: { c1: [11.3, 2.6], c2: [13.3, 4.8], E: [14.8, 10.3], Tb: [15.7, 23.0], end: 5.0, cuff: 2.6, inset: 0.45 },
+    long: { c1: [11.3, 2.6], c2: [14.3, 4.8], E: [16.1, 10.3], Tb: [18.6, 23.0], end: 5.5, cuff: 2.6, inset: 0.45 },
   });
   const HOODIE = addHood(build({
     n: 5.4, dF: 2.6, dB: 1.0, W: 10.5, hemY: 27.8, hemRib: 2.75, hood: true,
     shoulder: [10.2, 2.2], underarm: [10.4, 11.0],
-    long: { c1: [11.4, 2.7], c2: [13.4, 5.0], E: [14.9, 10.5], Tb: [15.8, 23.2], end: 5.0, cuff: 2.75, inset: 0.45 },
+    long: { c1: [11.4, 2.7], c2: [14.4, 5.0], E: [16.2, 10.5], Tb: [18.7, 23.2], end: 5.5, cuff: 2.75, inset: 0.45 },
   }), 5.4);
 
   const HOOD_SPEC = {
     n: 5.4, dF: 2.6, dB: 1.0, W: 10.5, hemY: 27.8, hemRib: 2.75, hood: true,
     shoulder: [10.2, 2.2], underarm: [10.4, 11.0],
-    long: { c1: [11.4, 2.7], c2: [13.4, 5.0], E: [14.9, 10.5], Tb: [15.8, 23.2], end: 5.0, cuff: 2.75, inset: 0.45 },
+    long: { c1: [11.4, 2.7], c2: [14.4, 5.0], E: [16.2, 10.5], Tb: [18.7, 23.2], end: 5.5, cuff: 2.75, inset: 0.45 },
   };
   // Full-zip hoodie: same body and hood, a center front zip from the hood's V to the hem.
   const ZIP = addHood(build(HOOD_SPEC), 5.4);
@@ -225,7 +225,7 @@
   const JACKET = build({
     n: 3.8, rib: 1.35, dF: 3.2, dB: 0.9, W: 10.8, hemY: 26.6, hemRib: 2.8,
     shoulder: [10.5, 2.2], underarm: [10.6, 11.2],
-    long: { c1: [11.6, 2.75], c2: [14.1, 5.1], E: [15.6, 10.6], Tb: [16.4, 23.0], end: 5.3, cuff: 2.8, inset: 0.45 },
+    long: { c1: [11.6, 2.75], c2: [15.1, 5.1], E: [16.9, 10.6], Tb: [19.3, 23.0], end: 5.8, cuff: 2.8, inset: 0.45 },
   });
   JACKET.zipFront = true;
   {
