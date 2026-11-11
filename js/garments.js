@@ -198,23 +198,23 @@
   const LONGTEE = build({
     n: 3.6, rib: 0.85, dF: 3.4, dB: 0.85, W: 10.2, hemY: 28.6,
     shoulder: [9.9, 2.0], underarm: [10.1, 10.4],
-    long: { c1: [12.5, 2.5], c2: [16.1, 4.6], E: [17.9, 10.0], Tb: [18.8, 23.4], end: 8.3, cuff: 1.9, inset: 0.35 },
+    long: { c1: [12.0, 2.5], c2: [15.0, 4.6], E: [16.7, 10.0], Tb: [17.6, 23.4], end: 7.1, cuff: 1.9, inset: 0.35 },
   });
   const CREW = build({
     n: 3.75, rib: 0.95, dF: 3.2, dB: 0.9, W: 10.4, hemY: 27.6, hemRib: 2.6, vee: true,
     shoulder: [10.1, 2.1], underarm: [10.3, 10.8],
-    long: { c1: [12.8, 2.6], c2: [16.8, 4.8], E: [18.6, 10.3], Tb: [19.5, 23.0], end: 8.8, cuff: 2.6, inset: 0.45 },
+    long: { c1: [12.3, 2.6], c2: [15.7, 4.8], E: [17.4, 10.3], Tb: [18.3, 23.0], end: 7.6, cuff: 2.6, inset: 0.45 },
   });
   const HOODIE = addHood(build({
     n: 5.4, dF: 2.6, dB: 1.0, W: 10.5, hemY: 27.8, hemRib: 2.75, hood: true,
     shoulder: [10.2, 2.2], underarm: [10.4, 11.0],
-    long: { c1: [12.9, 2.7], c2: [16.9, 5.0], E: [18.7, 10.5], Tb: [19.6, 23.2], end: 8.8, cuff: 2.75, inset: 0.45 },
+    long: { c1: [12.4, 2.7], c2: [15.8, 5.0], E: [17.5, 10.5], Tb: [18.4, 23.2], end: 7.6, cuff: 2.75, inset: 0.45 },
   }), 5.4);
 
   const HOOD_SPEC = {
     n: 5.4, dF: 2.6, dB: 1.0, W: 10.5, hemY: 27.8, hemRib: 2.75, hood: true,
     shoulder: [10.2, 2.2], underarm: [10.4, 11.0],
-    long: { c1: [12.9, 2.7], c2: [16.9, 5.0], E: [18.7, 10.5], Tb: [19.6, 23.2], end: 8.8, cuff: 2.75, inset: 0.45 },
+    long: { c1: [12.4, 2.7], c2: [15.8, 5.0], E: [17.5, 10.5], Tb: [18.4, 23.2], end: 7.6, cuff: 2.75, inset: 0.45 },
   };
   // Full-zip hoodie: same body and hood, a center front zip from the hood's V to the hem.
   const ZIP = addHood(build(HOOD_SPEC), 5.4);
@@ -225,7 +225,7 @@
   const JACKET = build({
     n: 3.8, rib: 1.35, dF: 3.2, dB: 0.9, W: 10.8, hemY: 26.6, hemRib: 2.8,
     shoulder: [10.5, 2.2], underarm: [10.6, 11.2],
-    long: { c1: [13.1, 2.75], c2: [17.6, 5.1], E: [19.4, 10.6], Tb: [20.2, 23.0], end: 9.1, cuff: 2.8, inset: 0.45 },
+    long: { c1: [12.6, 2.75], c2: [16.5, 5.1], E: [18.2, 10.6], Tb: [19.0, 23.0], end: 7.9, cuff: 2.8, inset: 0.45 },
   });
   JACKET.zipFront = true;
   {
@@ -245,17 +245,18 @@
 
   // Bottoms: origin = top of the waistband on the center line; y runs down to the hem.
   function buildBottoms(sp) {
-    const { wa, wb, hipX, hipY, rise, L, outHem, inHem, cuff = 0, slope = 0 } = sp;
+    const { wa, wb, hipX, hipY, rise, L, outHem, inHem, cuff = 0, slope = 0, hipOut = 0 } = sp;
+    const hx = hipX + hipOut; // outline hip (pockets keep using hipX)
     const g = { kind: 'bottom', seams: [], stitches: [], ribs: [], folds: [], spec: { ...sp, W: hipX, hemY: L }, sleeves: [], armpits: [], shoulderTop: [] };
     const right = [
       ['L', [wa, 0]], ['L', [wa, wb]],
-      ['C', [wa + 0.4, wb + 3.0], [hipX - 0.1, hipY - 3.2], [hipX, hipY]],
+      ['C', [wa + 0.4, wb + 3.0], [hx - 0.1, hipY - 3.2], [hx, hipY]],
     ];
     let iTop, yI;
     if (cuff) {
       const yTop = L - cuff - 0.15, oTop = outHem + 0.55;
       iTop = inHem - 0.55; yI = yTop;
-      right.push(['C', [hipX + 0.1, hipY + 8], [oTop + 0.5, yTop - 10], [oTop, yTop]],
+      right.push(['C', [hx + 0.1, hipY + 8], [oTop + 0.5, yTop - 10], [oTop, yTop]],
         ['L', [outHem, L - cuff]], ['L', [outHem - 0.05, L]], ['L', [inHem + 0.05, L]], ['L', [inHem, L - cuff]], ['L', [iTop, yTop]]);
       const cuffR = path([inHem, L - cuff], [['L', [outHem, L - cuff]], ['L', [outHem - 0.05, L]], ['L', [inHem + 0.05, L]]], true);
       const cuffL = path([-inHem, L - cuff], [['L', [-outHem, L - cuff]], ['L', [-outHem + 0.05, L]], ['L', [-inHem - 0.05, L]]], true);
@@ -266,7 +267,7 @@
       g.folds.push(...both([inHem + 0.6, L - cuff - 1.6], [['Q', [(inHem + outHem) / 2, L - cuff - 0.4], [outHem - 0.4, L - cuff - 1.9]]]));
     } else {
       const yOut = L - slope;
-      right.push(['C', [hipX + 0.1, hipY + 4], [outHem + 0.15, yOut - 4], [outHem, yOut]], ['L', [inHem, L]]);
+      right.push(['C', [hx + 0.1, hipY + 4], [outHem + 0.15, yOut - 4], [outHem, yOut]], ['L', [inHem, L]]);
       iTop = inHem; yI = L;
       if (!sp.plainHem) g.stitches.push(...both([outHem - 0.1, yOut - 0.9], [['L', [inHem + 0.1, L - 0.9]]]));
       g.hemTop = L;
@@ -307,13 +308,13 @@
       },
       back: { seams: [cb, patch], stitches: [patchSt] },
     };
-    const maxX = Math.max(hipX, outHem) + 1.2;
+    const maxX = Math.max(hx, outHem) + 1.2;
     g.bbox = { x: -maxX, y: -1.2, w: maxX * 2, h: L + 2.4 };
     return g;
   }
 
-  const PANTS = buildBottoms({ wa: 9.6, wb: 1.9, hipX: 10.2, hipY: 8.8, rise: 13, L: 42.5, outHem: 10.8, inHem: 1.2, slope: 0.4, plainHem: true });
-  const SHORTS = buildBottoms({ wa: 9.6, wb: 1.9, hipX: 10.2, hipY: 8.8, rise: 12.6, L: 20.6, outHem: 10.2, inHem: 1.2, slope: 0.4 });
+  const PANTS = buildBottoms({ wa: 9.6, wb: 1.9, hipX: 10.2, hipY: 8.8, rise: 13, L: 42.5, outHem: 10.8, inHem: 1.2, slope: 0.4, plainHem: true, hipOut: 1.0 });
+  const SHORTS = buildBottoms({ wa: 9.6, wb: 1.9, hipX: 10.2, hipY: 8.8, rise: 12.6, L: 20.6, outHem: 10.2, inHem: 1.2, slope: 0.4, hipOut: 1.0 });
 
   const SHAPES = { tee: TEE, longtee: LONGTEE, hoodie: HOODIE, crew: CREW, ziphoodie: ZIP, jacket: JACKET, shorts: SHORTS, pants: PANTS };
 
