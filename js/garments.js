@@ -193,28 +193,28 @@
   const TEE = build({
     n: 3.6, rib: 0.85, dF: 3.5, dB: 0.85, W: 10.2, hemY: 28.4,
     shoulder: [9.8, 1.9], underarm: [10.1, 9.9],
-    short: { c1: [11.0, 2.4], c2: [12.5, 3.4], T: [14.9, 5.0], open: 6.6 },
+    short: { c1: [11.2, 2.4], c2: [13.1, 3.5], T: [15.6, 5.1], open: 7.3 },
   });
   const LONGTEE = build({
     n: 3.6, rib: 0.85, dF: 3.4, dB: 0.85, W: 10.2, hemY: 28.6,
     shoulder: [9.9, 2.0], underarm: [10.1, 10.4],
-    long: { c1: [11.4, 2.5], c2: [13.3, 4.6], E: [14.8, 10.0], Tb: [19.1, 23.4], end: 4.4, cuff: 1.9, inset: 0.35 },
+    long: { c1: [11.7, 2.5], c2: [13.3, 4.6], E: [14.9, 10.0], Tb: [15.8, 23.4], end: 5.3, cuff: 1.9, inset: 0.35 },
   });
   const CREW = build({
     n: 3.75, rib: 0.95, dF: 3.2, dB: 0.9, W: 10.4, hemY: 27.6, hemRib: 2.6, vee: true,
     shoulder: [10.1, 2.1], underarm: [10.3, 10.8],
-    long: { c1: [11.7, 2.6], c2: [13.8, 4.8], E: [15.2, 10.3], Tb: [19.6, 23.0], end: 4.9, cuff: 2.6, inset: 0.45 },
+    long: { c1: [12.0, 2.6], c2: [14.0, 4.8], E: [15.6, 10.3], Tb: [16.5, 23.0], end: 5.8, cuff: 2.6, inset: 0.45 },
   });
   const HOODIE = addHood(build({
     n: 5.4, dF: 2.6, dB: 1.0, W: 10.5, hemY: 27.8, hemRib: 2.75, hood: true,
     shoulder: [10.2, 2.2], underarm: [10.4, 11.0],
-    long: { c1: [11.8, 2.7], c2: [13.9, 5.0], E: [15.3, 10.5], Tb: [19.6, 23.2], end: 4.9, cuff: 2.75, inset: 0.45 },
+    long: { c1: [12.1, 2.7], c2: [14.1, 5.0], E: [15.7, 10.5], Tb: [16.6, 23.2], end: 5.8, cuff: 2.75, inset: 0.45 },
   }), 5.4);
 
   const HOOD_SPEC = {
     n: 5.4, dF: 2.6, dB: 1.0, W: 10.5, hemY: 27.8, hemRib: 2.75, hood: true,
     shoulder: [10.2, 2.2], underarm: [10.4, 11.0],
-    long: { c1: [11.8, 2.7], c2: [13.9, 5.0], E: [15.3, 10.5], Tb: [19.6, 23.2], end: 4.9, cuff: 2.75, inset: 0.45 },
+    long: { c1: [12.1, 2.7], c2: [14.1, 5.0], E: [15.7, 10.5], Tb: [16.6, 23.2], end: 5.8, cuff: 2.75, inset: 0.45 },
   };
   // Full-zip hoodie: same body and hood, a center front zip from the hood's V to the hem.
   const ZIP = addHood(build(HOOD_SPEC), 5.4);
@@ -225,7 +225,7 @@
   const JACKET = build({
     n: 3.8, rib: 1.35, dF: 3.2, dB: 0.9, W: 10.8, hemY: 26.6, hemRib: 2.8,
     shoulder: [10.5, 2.2], underarm: [10.6, 11.2],
-    long: { c1: [12.0, 2.75], c2: [14.4, 5.1], E: [15.8, 10.6], Tb: [20.2, 23.0], end: 5.2, cuff: 2.8, inset: 0.45 },
+    long: { c1: [12.3, 2.75], c2: [14.8, 5.1], E: [16.4, 10.6], Tb: [17.2, 23.0], end: 6.1, cuff: 2.8, inset: 0.45 },
   });
   JACKET.zipFront = true;
   {
@@ -288,8 +288,9 @@
     }
 
     const cb = path([0, wb], [['L', [0, rise - 0.15]]]);
-    const pocket = both([wa - 1.45, wb], [['Q', [wa + 1.7, wb + 3.3], [hipX - 0.02, hipY]]]);
-    const pStitch = both([wa - 1.8, wb], [['Q', [wa + 1.35, wb + 3.7], [hipX - 0.08, hipY + 0.45]]]);
+    // slanted side-pocket opening, kept well inside the side seam
+    const pocket = both([wa - 2.0, wb], [['Q', [wa - 0.5, wb + 4.5], [hipX - 0.02, hipY + 1.7]]]);
+    const pStitch = both([wa - 2.4, wb], [['Q', [wa - 0.85, wb + 4.9], [hipX - 0.4, hipY + 2.0]]]);
     const py = wb + 2.4;
     const patch = path([3.3, py], [['L', [8.3, py]], ['L', [8.1, py + 5.4]], ['Q', [5.8, py + 6.1], [3.5, py + 5.4]]], true);
     const patchSt = path([3.65, py + 0.35], [['L', [7.95, py + 0.35]], ['L', [7.78, py + 5.05]], ['Q', [5.8, py + 5.7], [3.82, py + 5.05]]], true);
